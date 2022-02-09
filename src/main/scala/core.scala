@@ -17,8 +17,8 @@ def root(tag: String, value: String = "")(body: Builder): Tree =
 def appendLeaf(tag: String)(value: String): Builder = 
   summon[TreeBuilder].sub += TreeBuilder(tag, value)
 
-def appendBranch(tag: String)(body: Builder): Builder = 
-  val subTree = TreeBuilder(tag, "")
+def appendBranch(tag: String, value: String = "")(body: Builder): Builder = 
+  val subTree = TreeBuilder(tag, value)
   body(using subTree)
   summon[TreeBuilder].sub += subTree
 
