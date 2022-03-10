@@ -1,6 +1,6 @@
 import taggy.*
 @main def test = 
-  val doc = 
+  val doc: Tree = 
     document:
       title("The Gurka Story")
       t"hejsan"
