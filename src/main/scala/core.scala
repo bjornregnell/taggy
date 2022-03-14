@@ -1,13 +1,16 @@
 
 package taggy
 
+type Setting = (String, Any)
+type Settings = Map[String, Any]
+
 case class Tree(tag: String, value: String, sub: Tree*):
   def show: String = 
     def loop(t: Tree, level: Int): String = 
       val indent = "  " * level
       val node = s"""${t.tag}${if t.value.isEmpty then ":" else "(" + t.value + ")"}""" 
-      val subNodes = t.sub.map(st => loop(st, level + 1)).mkString("","","")
-      s"$indent$node\n$subNodes"
+      val subnodes = t.sub.map(st => loop(st, level + 1)).mkString("","","")
+      s"$indent$node\n$subnodes"
     loop(this, 0)
 
 class TreeBuilder(val tag: String, val value: String, initSub: TreeBuilder*):
