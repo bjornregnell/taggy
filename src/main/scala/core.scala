@@ -1,10 +1,7 @@
 
 package taggy
 
-type Setting = (String, Any)
-type Settings = Map[String, Any]
-
-case class Tree(tag: String, value: String, sub: Tree*):
+case class Tree(tag: Tag, value: String, sub: Tree*):
   def show: String = 
     def loop(t: Tree, level: Int): String = 
       val indent = "  " * level
@@ -13,26 +10,26 @@ case class Tree(tag: String, value: String, sub: Tree*):
       s"$indent$node\n$subnodes"
     loop(this, 0)
 
-class TreeBuilder(val tag: String, val value: String, initSub: TreeBuilder*):
+class TreeBuilder(val tag: Tag, val value: String, initSub: TreeBuilder*):
   val sub: scala.collection.mutable.Buffer[TreeBuilder] = initSub.toBuffer 
   def toTree: Tree = Tree(tag, value, sub.map(_.toTree).toSeq*)
 
 type TreeContext = TreeBuilder ?=> Unit
 
-def root(tag: String, value: String = "")(body: TreeContext): Tree = 
+def root(tag: Tag, value: String = "")(body: TreeContext): Tree = 
   given tb: TreeBuilder = TreeBuilder(tag, value)
   body
   tb.toTree
 
-def appendLeaf(tag: String)(value: String): TreeContext = 
+def appendLeaf(tag: Tag)(value: String): TreeContext = 
   summon[TreeBuilder].sub += TreeBuilder(tag, value)
 
-def appendBranch(tag: String, value: String = "")(body: TreeContext): TreeContext = 
+def appendBranch(tag: Tag, value: String = "")(body: TreeContext): TreeContext = 
   val subTree = TreeBuilder(tag, value)
   body(using subTree)
   summon[TreeBuilder].sub += subTree
 
-def appendStringContext(tag: String, sc: StringContext, args: Any*): TreeContext = 
+def appendStringContext(tag: Tag, sc: StringContext, args: Any*): TreeContext = 
   val strings = sc.parts.iterator
   val expressions = args.iterator
   // interpolate strings with expressions:
