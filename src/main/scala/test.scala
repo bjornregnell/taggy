@@ -20,4 +20,5 @@ import taggy.*
   println(doc)
   println(doc.show)
   println(doc.toLatex)
-  
+  Latex.mk(doc)
+   
