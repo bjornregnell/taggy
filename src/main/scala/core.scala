@@ -10,7 +10,7 @@ case class Tree(tag: Tag, value: String, sub: Tree*):
       s"$indent$node\n$subnodes"
     loop(this, 0)
 
-class TreeBuilder(val tag: Tag, val value: String, initSub: TreeBuilder*):
+class TreeBuilder(var tag: Tag, var value: String, initSub: TreeBuilder*):
   val sub: scala.collection.mutable.Buffer[TreeBuilder] = initSub.toBuffer 
   def toTree: Tree = Tree(tag, value, sub.map(_.toTree).toSeq*)
 

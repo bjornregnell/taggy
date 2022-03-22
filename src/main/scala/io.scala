@@ -10,6 +10,8 @@ def load(fileName: String): String =
   try result = source.mkString finally source.close()
   result
 
+def createDirIfNotExist(dir: String): Boolean = java.io.File(dir).mkdirs()
+
 extension (s: String)
   def save(fileName: String): Unit = 
     val f = java.io.File(fileName)
