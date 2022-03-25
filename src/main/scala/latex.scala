@@ -7,12 +7,14 @@ extension (tree: Tree)
     Latex.mk(tree, outFileNoSuffix: String, workDir: String)
 
 object Latex:
+  object Default:
+    def outDir = "target/tex/"
   def fromTree(tree: Tree): String =
     def loop(t: Tree): String =
       inline def tail: String = t.sub.map(loop).mkString
       t.tag match
         case Document  => Latex.env("document")(tail)
-        case Slide     => Latex.envArg("Slide")(t.value)(tail)
+        case Frame     => Latex.envArg("Frame")(t.value)(tail)
         case Title     => Latex.cmdArg("title")(t.value) ++ "\n" ++ tail
         case Heading1  => Latex.cmdArg("section")(t.value) ++ "\n" ++ tail
         case Text      => s"${t.value}$tail"
@@ -51,21 +53,24 @@ object Latex:
     val newlineAfterBody = if body.endsWith("\n") then "" else "\n"
     s"\n\\begin{$environment}${braces(args*)}\n$body$newlineAfterBody\\end{$environment}"
 
-  def mk(tree: Tree, out: String = "out", workDir: String = ".")(using LatexPreamble): Int = 
+  def mk(tree: Tree, out: String = "out", workDir: String = Default.outDir)
+    (using LatexPreamble): Int = 
     import scala.sys.process.{Process  => OSProc}
     createDirIfNotExist(workDir)
     (summon[LatexPreamble].value ++ tree.toLatex).save(s"$workDir/$out.tex")
     val wd = java.io.File(workDir)
     val proc = OSProc(Seq("latexmk", "-pdf", "-cd", "-halt-on-error", "-silent", s"$out.tex"), wd)
     val procOutputFile = java.io.File(s"$workDir/$out.log")
-    proc.#>(procOutputFile).run.exitValue
-
+    val result = proc.#>(procOutputFile).run.exitValue
+    if result == 0 then println(s"Latex output generated in $workDir")
+    result
+    
  
 case class LatexPreamble(value: String)
 object LatexPreamble:
-  given defaultLatexPreamble: LatexPreamble = simpleSlides
+  given defaultLatexPreamble: LatexPreamble = simpleFrames
 
-  def simpleSlides = LatexPreamble(s"""
+  def simpleFrames = LatexPreamble(s"""
     \\documentclass{beamer}
     
     \\beamertemplatenavigationsymbolsempty
@@ -77,8 +82,8 @@ object LatexPreamble:
     \\usepackage[T1]{fontenc}
     \\usepackage[scaled=0.95]{beramono} % inconsolata or beramono ???
     \\usepackage[scale=0.9]{tgheros}
-    \\newenvironment{Slide}[2][]
-      {\\begin{frame}[fragile,environment=Slide,#1]{#2}}
+    \\newenvironment{Frame}[2][]
+      {\\begin{frame}[fragile,environment=Frame,#1]{#2}}
       {\\end{frame}} 
     """.minMargin
   ) 

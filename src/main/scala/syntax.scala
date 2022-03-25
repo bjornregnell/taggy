@@ -1,14 +1,14 @@
 package taggy
 
 enum Tag:
-  case Document, Slide, Items, Numbered, Title, Text, Paragraph, Heading1, Heading2
+  case Document, Frame, Items, Numbered, Title, Text, Paragraph, Heading1, Heading2
 
 import Tag.*
 
 def document(body: TreeContext): Tree = root(Document)(body)
 def bullets(body: TreeContext): TreeContext = appendBranch(Items)(body)
 def numbers(body: TreeContext): TreeContext = appendBranch(Numbered)(body)
-def slide(title: String)(body: TreeContext): TreeContext = appendBranch(Slide, title)(body)
+def frame(title: String)(body: TreeContext): TreeContext = appendBranch(Frame, title)(body)
   
 extension (sc: StringContext) 
   def title(args: Any*): TreeContext = appendStringContext(Title, sc, args*)

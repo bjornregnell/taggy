@@ -3,7 +3,7 @@ import taggy.*
 @main def test = 
   val doc: Tree = 
     document:
-      slide("Vad är öppen källkod?"):
+      frame("Vad är öppen källkod?"):
         p"Källkod som"
         numbers:
           p"är fritt tillgänglig"
@@ -18,7 +18,7 @@ import taggy.*
   println(doc.show)
   println(doc.toLatex)
   val exitValue = Latex.mk(doc)
-  println(ls())
+  println(ls(Latex.Default.outDir).mkString(", "))
   if exitValue != 0 then 
     println(load("out.log"))
     //throw Exception("Error during latexmk")
