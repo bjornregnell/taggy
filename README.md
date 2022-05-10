@@ -25,7 +25,7 @@ def slides = document("Taggy Slide Example"):
     itemize:
       p("English: Hello world!")
       p("Swedish: Hej världen!")
-      p("https://cs.lth.se/edaa65/")
+    p("https://github.com/bjornregnell/taggy")
 ```
 
 * Use `taggy` with [`sbt`](https://www.scala-sbt.org/) 
