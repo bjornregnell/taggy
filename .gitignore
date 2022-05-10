@@ -2,6 +2,8 @@ test/
 .metals/
 **/metals.sbt
 
+**/.scala-build/
+**/.vscode/
 .bloop/
 **/target/
 **/*.class
