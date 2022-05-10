@@ -1,32 +1,32 @@
 package taggy
 
-def loadLines(path: String): Seq[String] =               // top-level definition
+def loadLines(path: String): Seq[String] =
   io.Source.fromFile(path, "UTF-8").getLines.toSeq 
 
 def selectFrom(path: String)(fromUntil: (String, String)): String = 
-  val (from, until) = (fromUntil(0).trim, fromUntil(1).trim)  // apply on tuples
+  val (from, until) = (fromUntil(0).trim, fromUntil(1).trim)
   val xs = loadLines(path).dropWhile(! _.trim.startsWith(from))
   (xs.take(1) ++ xs.drop(1).takeWhile(x => 
-    if until.isEmpty then x.trim.nonEmpty                  // new control syntax
+    if until.isEmpty then x.trim.nonEmpty 
     else ! x.trim.startsWith(until)
   )).mkString("\n")
 
 def createDirs(path: String): Boolean = 
-  java.io.File(path).mkdirs()         // universal apply methods: new not needed
+  java.io.File(path).mkdirs()
 
-extension (s: String) def saveTo(path: String): Unit =      // extension methods
+extension (s: String) def saveTo(path: String): Unit =
     val pw = java.io.PrintWriter(java.io.File(path), "UTF-8")
     try pw.write(s) finally pw.close()
 
-enum Tag:          // scalable enums, from simple to generic algebraic datatypes
+enum Tag:
   case Document, Frame, Itemize, Enumerate, Paragraph, Code
 
-export Tag.* // tailor the namespace and api with export, no need for forwarders
+export Tag.*
 
 class Tree(var tag: Tag, var value: String): 
   val sub = collection.mutable.Buffer[Tree]() 
 
-extension (t: Tree)                              // collective extension methods
+extension (t: Tree)
   def show: String = 
     def loop(t: Tree, level: Int): String = 
       val indent = "  " * level
@@ -40,11 +40,9 @@ extension (t: Tree)                              // collective extension methods
   def toPdf(out: String = "out", dir: String = "target")(using Preamble): Unit = 
     Latex.make(t, out, dir)
 
-                  //end markers are checked by the compiler
+type TreeContext = Tree ?=> Unit
 
-type TreeContext = Tree ?=> Unit              // abstract over context functions
-
-def root(tag: Tag, value: String)(body: TreeContext): Tree =   //builder-pattern
+def root(tag: Tag, value: String)(body: TreeContext): Tree =
   given t: Tree = Tree(tag, value)
   body
   t
