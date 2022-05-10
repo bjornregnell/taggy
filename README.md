@@ -1,5 +1,8 @@
 # taggy
+
 * A simple-to-use zero-dependency [Scala 3](https://docs.scala-lang.org/scala3/new-in-scala3.html) library for tagging structured text to be unparsed as md, html or latex.
+
+* You need to have `latexmk` from [TexLive](https://tug.org/texlive/) if you want to generate pdf.
 
 # How to use
 
