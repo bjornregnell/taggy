@@ -1,6 +1,7 @@
 test/
 .metals/
 **/metals.sbt
+**/*.jar
 
 **/.scala-build/
 **/.vscode/
