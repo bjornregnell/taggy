@@ -9,7 +9,7 @@
 
 * WARNING: `taggy` is a proof-of-concept and still under development. It benefits from an experimental feature of the Scala 3.2.nightly compiler called [`fewerBraces`](https://docs.scala-lang.org/sips/fewer-braces.html).
 
-* You need to have `latexmk` from [TexLive](https://tug.org/texlive/) on your path.
+* You need to have `latexmk` from [TexLive](https://tug.org/texlive/) on your path. Install it on Ubuntu using `sudo apt install texlive-full`
 
 # How to use `taggy`?
 
