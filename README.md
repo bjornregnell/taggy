@@ -37,7 +37,12 @@ def slides = document("Taggy Slide Example"):
     p("https://github.com/bjornregnell/taggy")
 ```
 
-See bigger example [here](https://github.com/bjornregnell/taggy/tree/main/example.scala).
+* Instead of doing the copy-paste-save above you can just run this command and you should get see slides in a pdf viewer when ready:
+```
+curl -fL https://github.com/bjornregnell/taggy/releases/download/v0.0.2/init-slides.sh | bash
+```
+
+* See bigger example [here](https://github.com/bjornregnell/taggy/tree/main/example.scala).
 
 # How to build `taggy`?
 
