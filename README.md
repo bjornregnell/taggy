@@ -5,7 +5,7 @@
 
 * With `taggy` you can make **good-looking slides** in pdf via latex. Future plans include generation of markdown and html.
 
-* `taggy` is a zero-dependency [Scala 3](https://docs.scala-lang.org/scala3/new-in-scala3.html) library that shows how you can construct a concise and type-safe Scala-embedded DSL using [contextual abstraction](https://docs.scala-lang.org/scala3/reference/contextual/index.html) in Scala 3. 
+* `taggy` is a zero-dependency [Scala 3](https://docs.scala-lang.org/scala3/new-in-scala3.html) library that shows how you can construct a concise and type-safe Scala-embedded DSL using [contextual abstraction](https://docs.scala-lang.org/scala3/reference/contextual/index.html). 
 
 * WARNING: `taggy` is a proof-of-concept and still under development. It benefits from an experimental feature of the Scala 3.2.nightly compiler called [`fewerBraces`](https://docs.scala-lang.org/sips/fewer-braces.html).
 
