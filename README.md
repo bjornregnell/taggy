@@ -1,7 +1,7 @@
 # What is `taggy`?
 
 
-* `taggy` is an easy-to-use api for **tagging structured text**, see example below.
+* `taggy` is an easy-to-use api for **tagging structured text**, see [example below](https://github.com/bjornregnell/taggy#how-to-use-taggy).
 
 * With `taggy` you can make **good-looking slides** in pdf via latex. Future plans include generation of markdown and html.
 
