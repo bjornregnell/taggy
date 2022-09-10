@@ -13,7 +13,7 @@
 
 # How to use `taggy`?
 
-* Example usage of `taggy` with [`scala-cli`](https://scala-cli.virtuslab.org/) that automatically downloads `taggy` as a Github dependency. 
+* See example usage of `taggy` below, with [`scala-cli`](https://scala-cli.virtuslab.org/) that automatically downloads `taggy` as a Github dependency. 
 * Copy paste the text below and save it in a file in an empty folder and do `scala-cli run .` in that folder.
 ```
 // Two magic comments used by scala-cli (just copy-paste them):
