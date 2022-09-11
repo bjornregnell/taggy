@@ -14,7 +14,7 @@ fi
 
 cat > "$DEST" << EOF
 // Two magic comments used by scala-cli (just copy-paste them):
-//> using lib "taggy:taggy:0.0.2,url=https://github.com/bjornregnell/taggy/releases/download/v0.0.2/taggy_3-0.0.2.jar"
+//> using lib "taggy:taggy:0.0.3,url=https://github.com/bjornregnell/taggy/releases/download/v0.0.3/taggy_3-0.0.3.jar"
 //> using scala "3.2.nightly"
 
 //  run this command in terminal to create slides in target/out.pdf 

@@ -3,7 +3,7 @@
 
 * `taggy` is an easy-to-use api for **tagging structured text**, see [example below](https://github.com/bjornregnell/taggy#how-to-use-taggy).
 
-* With `taggy` you can make **good-looking slides** in pdf via latex. See example [here](https://github.com/bjornregnell/taggy/releases/download/v0.0.2/out.pdf). Future plans include generation of markdown and html.
+* With `taggy` you can make **good-looking slides** in pdf via latex. See example [here](https://github.com/bjornregnell/taggy/releases/download/v0.0.3/out.pdf). Future plans include generation of markdown and html.
 
 * `taggy` is a zero-dependency [Scala 3](https://docs.scala-lang.org/scala3/new-in-scala3.html) library that shows how you can construct a concise and type-safe Scala-embedded DSL using [contextual abstraction](https://docs.scala-lang.org/scala3/reference/contextual/index.html). 
 
@@ -17,7 +17,7 @@
 * Copy-paste the text below and save it in a file called `my-slides.scala` in an empty new folder and do `scala-cli run .` in that folder.
 ```
 // Two magic comments used by scala-cli (just copy-paste them):
-//> using lib "taggy:taggy:0.0.2,url=https://github.com/bjornregnell/taggy/releases/download/v0.0.2/taggy_3-0.0.2.jar"
+//> using lib "taggy:taggy:0.0.3,url=https://github.com/bjornregnell/taggy/releases/download/v0.0.3/taggy_3-0.0.3.jar"
 //> using scala "3.2.nightly"
 
 //  run this command in terminal to create slides in target/out.pdf 
@@ -39,14 +39,14 @@ def slides = document("Taggy Slide Example"):
 
 * Instead of doing the copy-paste-save above you can just run this command and you should get see slides in a pdf viewer when ready:
 ```
-curl -fL https://github.com/bjornregnell/taggy/releases/download/v0.0.2/init-slides.sh | bash
+curl -fL https://github.com/bjornregnell/taggy/releases/download/v0.0.3/init-slides.sh | bash
 ```
 
 * See bigger example [here](https://github.com/bjornregnell/taggy/tree/main/example.scala).
 
 # How to build `taggy`?
 
-`scala-cli package taggy.scala -o taggy_3-0.0.2.jar --library`
+`scala-cli package taggy.scala -o taggy_3-0.0.3.jar --library`
 
 # How to publish `taggy`? 
 
