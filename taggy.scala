@@ -122,7 +122,7 @@ object Latex:
     def replaceAllMarkers: String = 
       var result = s
       for (pattern, (b, e)) <- replacePatterns do
-        result = pattern.replaceAllIn(result, m => s"$b${m.group(1)}$e")
+        result = pattern.replaceAllIn(result, m => s"$b${m.group(i)}$e")
       result
 
     def minimizeMargin: String = 
