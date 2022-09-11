@@ -12,20 +12,22 @@ import taggy.*
 def exampleSlides = document("Scala 3 goodies"){
   frame("Goals"):
     itemize:
-      p("Showcase cool new stuff in Scala 3")
-      p("Help you get started with Scala")
-      p("Illustrated by Scala 3 DSL (for these slides...)")
+      p("Showcase **cool new stuff** in Scala 3")
+      p("Help you get started with Scala using `scala-cli`")
+      p("Illustrated by Scala 3 DSL (for *these* slides...)")
       p("https://github.com/bjornregnell/new-in-Scala3")
 
   frame("A slide DSL embedded in Scala 3"):
-    codeFrom("example.scala"):
+    codeFromUntil(file = "example.scala"):
       "frame" -> """frame("Background"""
+    space(2.0)
+    p("**Run \\\\& open**: `scala-cli run . && xdg-open target/out.pdf`")
 
   frame("Background: What is Scala?"):
     itemize:
       p("A general-purpose programming language")
       itemize:
-        p("statically typed: find bugs earlier")
+        p("statically typed: **find bugs faster**")
         p("multi-paradigm: imperative, object-oriented, functional")
         p("scalable from small scripts to large production systems")
 
