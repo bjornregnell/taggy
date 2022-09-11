@@ -21,7 +21,7 @@ extension (s: String) def saveTo(path: String): Unit =
     try pw.write(s) finally pw.close()
 
 enum Tag:
-  case Document, Frame, Itemize, Enumerate, Paragraph, Code
+  case Document, Frame, Itemize, Enumerate, Paragraph, Code, Space
 
 export Tag.*
 
@@ -63,8 +63,9 @@ def enumerate(body: TreeContext): TreeContext = branch(Enumerate)(body)
 def frame(title: String)(body: TreeContext): TreeContext = branch(Frame, title)(body)
 def p(text: String): TreeContext = leaf(Paragraph, text)
 def code(text: String): TreeContext = leaf(Code, text)
-def codeFrom(file: String)(fromUntil: (String, String)): TreeContext = 
+def codeFromUntil(file: String)(fromUntil: (String, String)): TreeContext = 
   code(selectFrom(file)(fromUntil))
+def space(nbrOfLines: Double = 1.0): TreeContext = leaf(Space, nbrOfLines.toString)
 
 object Latex:
   def fromTree(tree: Tree): String =
@@ -85,6 +86,7 @@ object Latex:
           val listEnv = if t.tag == Itemize then "itemize" else "enumerate"
           env(listEnv)(body.mkString)
         case Code => env("Scala")(t.value.minimizeMargin)
+        case Space => cmdArg("vspace")(s"${t.value}em")
     loop(tree)
 
   def brackets(params: String*): String = 
@@ -121,7 +123,7 @@ object Latex:
   extension (s: String) 
     def replaceAllMarkers: String = 
       var result = s
-      for (pattern, (b, e)) <- replacePatterns do
+      for (pattern, (b, e, i)) <- replacePatterns do
         result = pattern.replaceAllIn(result, m => s"$b${m.group(i)}$e")
       result
 
@@ -139,7 +141,8 @@ object Latex:
       val proc = OSProc(Seq("latexmk", "-pdf", "-cd", "-halt-on-error", "-silent", s"$out.tex"), wd)
       val procOutputFile = java.io.File(s"$workDir/$out.log")
       val result = proc.#>(procOutputFile).run.exitValue
-      if result == 0 then println(s"Latex output generated in $workDir")
+      if result == 0 then println(s"Latex output generated in $workDir/$out.pdf")
+      else println(s"Latex ERROR in $workDir/$out.log")
       result
 
 
@@ -156,6 +159,7 @@ object Preamble:
 \\usepackage[utf8]{inputenc}
 \\usepackage[T1]{fontenc}
 \\usepackage{tgheros, beramono}
+\\usepackage{fancyvrb}
 \\usepackage{xcolor}
 \\definecolor{mygreen}{rgb}{0,0.4,0}
 \\definecolor{mylinkcolor}{rgb}{0,0.1,0.5}
@@ -189,12 +193,12 @@ object Preamble:
 \\lstset{
     language=Scala,
     tabsize=2,
-    basicstyle=\\ttfamily\\fontsize{9}{11}\\selectfont,
+    basicstyle=\\ttfamily\\fontsize{7.5}{10}\\selectfont,
     keywordstyle=\\bfseries\\color{eclipsepurple},
     commentstyle=\\color{mygreen},
     numberstyle={\\footnotesize},
     numbers=none,
-    %backgroundcolor=\\color{gray!5},
+    %backgroundcolor=\\color{gray!15},
     frame=none, %single,
     rulecolor=\\color{black!25},
     %title={\\footnotesize\\lstname},
