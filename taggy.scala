@@ -109,10 +109,13 @@ object Latex:
 
   def beginEndPattern(s: String) = s"$s([^$s]*)$s".r
 
-  val replacePatterns = Map[util.matching.Regex, (String, String)](
-    beginEndPattern("\\*\\*") -> ("\\\\textbf{", "}"),
-    beginEndPattern("\\*")    -> ("\\\\textit{", "}"),
-    beginEndPattern("\\`")    -> ("\\\\texttt{", "}"),
+  def urlPattern = "\\b(https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]".r
+
+  val replacePatterns = Vector[(util.matching.Regex, (String, String, Int))]( 
+    beginEndPattern("\\*\\*") -> ("\\\\textbf{", "}", 1),
+    beginEndPattern("\\*")    -> ("\\\\textit{", "}", 1),
+    beginEndPattern("\\`")    -> ("\\\\lstinline[language=]{", "}", 1),
+    urlPattern                -> ("{\\\\footnotesize{\\\\url{", "}}}", 0),
   )
 
   extension (s: String) 
