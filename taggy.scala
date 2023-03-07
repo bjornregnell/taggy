@@ -163,12 +163,12 @@ object Latex:
     createDirs(workDir)
     (pre.value ++ tree.toLatex).saveTo(s"$workDir/$out.tex")
     val wd = java.io.File(workDir)
-      val proc = OSProc(Seq("latexmk", "-pdf", "-cd", "-halt-on-error", "-silent", s"$out.tex"), wd)
-      val procOutputFile = java.io.File(s"$workDir/$out.log")
-      val result = proc.#>(procOutputFile).run.exitValue
-      if result == 0 then println(s"Latex output generated in $workDir/$out.pdf")
-      else println(s"Latex ERROR in $workDir/$out.log")
-      result
+    val proc = OSProc(Seq("latexmk", "-pdf", "-cd", "-halt-on-error", "-silent", s"$out.tex"), wd)
+    val procOutputFile = java.io.File(s"$workDir/$out.log")
+    val result = proc.#>(procOutputFile).run.exitValue
+    if result == 0 then println(s"Latex output generated in $workDir/$out.pdf")
+    else println(s"Latex ERROR in $workDir/$out.log")
+    result
 
   case class Preamble(value: String)
   object Preamble:
