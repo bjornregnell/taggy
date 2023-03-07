@@ -45,7 +45,9 @@ curl -fL https://github.com/bjornregnell/taggy/releases/download/v0.0.3/init-sli
 
 # How to build `taggy`?
 
-`scala-cli package taggy.scala -o taggy_3-0.0.3.jar --library`
+Change `$version` to latest.
+
+`scala-cli --power package taggy.scala -o taggy_3-$version.jar --library`
 
 # How to publish `taggy`? 
 
