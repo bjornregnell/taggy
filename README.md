@@ -17,7 +17,7 @@
 * Copy-paste the text below and save it in a file called `my-slides.scala` in an empty new folder and do `scala-cli run .` in that folder.
 ```
 // Two magic comments used by scala-cli (just copy-paste them):
-//> using lib "taggy:taggy:0.0.4,url=https://github.com/bjornregnell/taggy/releases/download/v0.0.4/taggy_3-0.0.4.jar"
+//> using lib "taggy:taggy:0.0.5,url=https://github.com/bjornregnell/taggy/releases/download/v0.0.5/taggy_3-0.0.5.jar"
 //> using scala "3.3.0-RC3"
 
 //  run this command in terminal to create slides in target/out.pdf 
@@ -41,16 +41,14 @@ def slides = document("Taggy Slide Example"):
 curl -fL https://github.com/bjornregnell/taggy/releases/download/v0.0.3/init-slides.sh | bash
 ```
 
-* See bigger example [here](https://github.com/bjornregnell/taggy/tree/main/example.scala).
+* See more examples [here](https://github.com/bjornregnell/taggy/tree/main/example.scala).
 
 # How to build `taggy`?
 
-Change `$version` to latest.
-
-`scala-cli --power package taggy.scala -o taggy_3-$version.jar --library`
+`scala-cli --power package taggy.scala -o taggy_3-0.0.5.jar --library`
 
 # How to publish `taggy`? 
 
-* Bump all versions to `0.0.n` in README.md and example.scala by replacing all `0.0.{n - 1}` by `0.0.n`  
+* Bump all versions to `x.y.z` in README.md and example.scala by replacing all `x.y.{z - 1}` by `x.y.z`  
 * Draft a new release on https://github.com/bjornregnell/taggy/releases
-* Build and upload jar named `taggy_3-0.0.n.jar` 
+* Build and upload jar named `taggy_3-x.y.z.jar` 

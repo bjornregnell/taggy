@@ -1,5 +1,5 @@
 //> using scala "3.3.0-RC3"
-//> using lib "taggy:taggy:0.0.4,url=https://github.com/bjornregnell/taggy/releases/download/v0.0.4/taggy_3-0.0.4.jar"
+//> using lib "taggy:taggy:0.0.5,url=https://github.com/bjornregnell/taggy/releases/download/v0.0.5/taggy_3-0.0.5.jar"
 
 //  run in terminal: scala-cli run example.scala
 

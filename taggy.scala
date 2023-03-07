@@ -48,7 +48,7 @@ extension (t: Tree)
 
   def toLatex: String = Latex.fromTree(t)
 
-  def toPdf(out: String = "out", dir: String = "target")(using Preamble): Unit = 
+  def toPdf(out: String = "out", dir: String = "target")(using Latex.Preamble): Unit = 
     Latex.make(t, out, dir)
 
 type TreeContext = Tree ?=> Unit
