@@ -1,5 +1,9 @@
 package taggy
 
+export Tag.*
+export Key.*
+export TreeBuilders.*
+
 def loadLines(path: String): Seq[String] =
   io.Source.fromFile(path, "UTF-8").getLines.toSeq 
 
@@ -19,11 +23,16 @@ extension (s: String) def saveTo(path: String): Unit =
     try pw.write(s) finally pw.close()
 
 enum Tag:
-  case Document, Frame, Itemize, Enumerate, Paragraph, Code, Space, Image
+  case Document, Frame, Itemize, Enumerate, Paragraph, Code, Space, Image, TextSize
 
-export Tag.*
+enum Key: 
+  case Width, FontSize, LineSpace
 
-class Tree(var tag: Tag, var value: String): 
+type Setting = (Key, String)
+val defaultSettings: Map[Key, String] = Map(Width -> "0.5", FontSize -> "10", LineSpace -> "12")
+
+class Tree(var tag: Tag, var value: String, settings: Setting*): 
+  lazy val config: Map[Key, String] = settings.toMap
   val sub = collection.mutable.Buffer[Tree]() 
 
 extension (t: Tree)
@@ -35,6 +44,8 @@ extension (t: Tree)
       s"$indent$node\n$subnodes"
     loop(t, 0)
 
+  def setting(k: Key): String = t.config.get(k).getOrElse(defaultSettings(k))
+
   def toLatex: String = Latex.fromTree(t)
 
   def toPdf(out: String = "out", dir: String = "target")(using Preamble): Unit = 
@@ -42,29 +53,38 @@ extension (t: Tree)
 
 type TreeContext = Tree ?=> Unit
 
-def root(tag: Tag, value: String)(body: TreeContext): Tree =
-  given t: Tree = Tree(tag, value)
+def root(tag: Tag, value: String, settings: Setting*)(body: TreeContext): Tree =
+  given t: Tree = Tree(tag, value, settings*)
   body
   t
 
-def leaf(tag: Tag, value: String): TreeContext = 
-  summon[Tree].sub += Tree(tag, value)
+def leaf(tag: Tag, value: String, settings: Setting*): TreeContext = 
+  summon[Tree].sub += Tree(tag, value, settings*)
 
-def branch(tag: Tag, value: String = "")(body: TreeContext): TreeContext = 
-  val subTree = Tree(tag, value)
+def branch(tag: Tag, value: String = "", settings: Setting*)(body: TreeContext): TreeContext = 
+  val subTree = Tree(tag, value, settings*)
   body(using subTree)
   summon[Tree].sub += subTree
 
-def document(title: String)(body: TreeContext): Tree = root(Document, title)(body)
-def itemize(body: TreeContext): TreeContext = branch(Itemize)(body)
-def enumerate(body: TreeContext): TreeContext = branch(Enumerate)(body)
-def frame(title: String)(body: TreeContext): TreeContext = branch(Frame, title)(body)
-def p(text: String): TreeContext = leaf(Paragraph, text)
-def code(text: String): TreeContext = leaf(Code, text)
-def codeFromUntil(file: String)(fromUntil: (String, String)): TreeContext = 
-  code(selectFrom(file)(fromUntil))
-def space(lines: Double = 1.0): TreeContext = leaf(Space, lines.toString)
-def image(file: String): TreeContext = leaf(Image, file)
+object TreeBuilders:
+  def document(title: String)(body: TreeContext): Tree = root(Document, title)(body)
+  def itemize(body: TreeContext): TreeContext = branch(Itemize)(body)
+  def enumerate(body: TreeContext): TreeContext = branch(Enumerate)(body)
+  def frame(title: String)(body: TreeContext): TreeContext = branch(Frame, title)(body)
+  def p(text: String): TreeContext = leaf(Paragraph, text)
+  def code(text: String): TreeContext = leaf(Code, text)
+
+  def codeFromUntil(file: String)(fromUntil: (String, String)): TreeContext = 
+    code(selectFrom(file)(fromUntil))
+
+  def space(lines: Double = 1.0): TreeContext = leaf(Space, lines.toString)
+
+  def image(file: String, width: Double = defaultSettings(Width).toDouble): TreeContext = 
+    leaf(Image, file, Width -> width.toString)
+
+  def textSize(fontSize: Double, lineSpace: Double): TreeContext = 
+    leaf(TextSize, "", FontSize -> fontSize.toString, LineSpace -> lineSpace.toString)
+end TreeBuilders
 
 object Latex:
   def fromTree(tree: Tree): String =
@@ -73,7 +93,7 @@ object Latex:
       t.tag match
         case Document  => env("document")(s"\\title{${t.value}}\\maketitle\n$tail")
         case Frame     => envArg("frame")("fragile")(t.value.replaceAllMarkers)(tail)
-        case Paragraph => s"${t.value.replaceAllMarkers}$tail\n"
+        case Paragraph => s"${t.value.replaceAllMarkers}$tail\n" ++ cmd("\\")
         case Itemize | Enumerate => 
           val body = t.sub.map(
             _ match 
@@ -88,14 +108,17 @@ object Latex:
         case Space => cmdArg("vspace")(s"${t.value}em")
         case Image => 
           cmd("vfill") ++ 
-            env("center")(cmdOptArg("includegraphics")("width=0.2\\textwidth")(t.value))
+            env("center")(cmdOptArg("includegraphics")(s"width=${t.config.get(Width).getOrElse(defaultSettings(Width))}\\textwidth")(t.value))
+        case TextSize =>
+          cmdArg("fontsize")(t.config.get(FontSize).getOrElse(defaultSettings(FontSize))++"pt",t.config.get(LineSpace).getOrElse(defaultSettings(LineSpace))++"pt") 
+            ++ cmd("selectfont")
     loop(tree)
 
   def brackets(params: String*): String = 
     if params.isEmpty then "" else params.mkString("[",",","]")
 
   def braces(params: String*): String = 
-    if params.isEmpty then "" else params.mkString("{",",","}")
+    if params.isEmpty then "" else params.mkString("{","}{","}")
 
   def cmd(command: String): String = s"\\$command"
 
@@ -147,97 +170,97 @@ object Latex:
       else println(s"Latex ERROR in $workDir/$out.log")
       result
 
+  case class Preamble(value: String)
+  object Preamble:
+    given defaultPreamble: Preamble = Preamble(slideTemplate())
 
-case class Preamble(value: String)
-object Preamble:
-  given defaultPreamble: Preamble = Preamble(slideTemplate())
+    def slideTemplate(): String = s"""
+  \\documentclass{beamer}
+  \\beamertemplatenavigationsymbolsempty
+  \\setbeamertemplate{footline}[frame number] 
+  \\setbeamercolor{page number in head/foot}{fg=gray} 
+  \\usepackage[swedish]{babel}
+  \\usepackage[utf8]{inputenc}
+  \\usepackage[T1]{fontenc}
+  \\usepackage{tgheros, beramono}
+  \\usepackage{fancyvrb}
+  \\usepackage{xcolor}
+  \\definecolor{mygreen}{rgb}{0,0.4,0}
+  \\definecolor{mylinkcolor}{rgb}{0,0.1,0.5}
+  \\definecolor{myemphcolor}{rgb}{0,0.4,0.1}
+  \\definecolor{myalertcolor}{rgb}{0.4,0.1,0}
+  \\definecolor{eclipsepurple}{rgb}{0.5,0,0.25}
+  \\definecolor{eclipseblue}{rgb}{0.16,0,1.0}
+  \\definecolor{eclipsegreen}{rgb}{0,0.5,0}
+  \\usepackage{listings}
 
-  def slideTemplate(): String = s"""
-\\documentclass{beamer}
-\\beamertemplatenavigationsymbolsempty
-\\setbeamertemplate{footline}[frame number] 
-\\setbeamercolor{page number in head/foot}{fg=gray} 
-\\usepackage[swedish]{babel}
-\\usepackage[utf8]{inputenc}
-\\usepackage[T1]{fontenc}
-\\usepackage{tgheros, beramono}
-\\usepackage{fancyvrb}
-\\usepackage{xcolor}
-\\definecolor{mygreen}{rgb}{0,0.4,0}
-\\definecolor{mylinkcolor}{rgb}{0,0.1,0.5}
-\\definecolor{myemphcolor}{rgb}{0,0.4,0.1}
-\\definecolor{myalertcolor}{rgb}{0.4,0.1,0}
-\\definecolor{eclipsepurple}{rgb}{0.5,0,0.25}
-\\definecolor{eclipseblue}{rgb}{0.16,0,1.0}
-\\definecolor{eclipsegreen}{rgb}{0,0.5,0}
-\\usepackage{listings}
+  %%% lingstings specifics:
 
-%%% lingstings specifics:
+  \\lstdefinelanguage{Scala}{
+    morekeywords={abstract,case,catch,class,def,%
+      do,else,enum,export,extends,false,final,finally,%
+      for,given,if,implicit,import,lazy,match,%
+      new,null,object,override,package,%
+      private,protected,return,sealed,%
+      super,then,throw,trait,true,try,%
+      type,val,var,while,with,yield,%
+      as, derives, end, extension, infix, inline, opaque, open, transparent, using}, % soft keywords
+    otherkeywords={=>,<-,<:,>:,@,=>>,?=>},
+    sensitive=true,
+    morecomment=[l]{//},
+    morecomment=[n]{/*}{*/},
+    morestring=[b]",
+    morestring=[b]',
+    morestring=[b]\"\"\"
+  }
 
-\\lstdefinelanguage{Scala}{
-  morekeywords={abstract,case,catch,class,def,%
-    do,else,enum,export,extends,false,final,finally,%
-    for,given,if,implicit,import,lazy,match,%
-    new,null,object,override,package,%
-    private,protected,return,sealed,%
-    super,then,throw,trait,true,try,%
-    type,val,var,while,with,yield,%
-    as, derives, end, extension, infix, inline, opaque, open, transparent, using}, % soft keywords
-  otherkeywords={=>,<-,<:,>:,@,=>>,?=>},
-  sensitive=true,
-  morecomment=[l]{//},
-  morecomment=[n]{/*}{*/},
-  morestring=[b]",
-  morestring=[b]',
-  morestring=[b]\"\"\"
-}
+  \\lstset{
+      language=Scala,
+      tabsize=2,
+      basicstyle=\\ttfamily,
+      keywordstyle=\\bfseries\\color{eclipsepurple},
+      commentstyle=\\color{mygreen},
+      numberstyle={\\footnotesize},
+      numbers=none,
+      %backgroundcolor=\\color{gray!15},
+      frame=none, %single,
+      rulecolor=\\color{black!25},
+      %title={\\footnotesize\\lstname},
+      breaklines=false,
+      breakatwhitespace=false,
+      framextopmargin=2pt,
+      framexbottommargin=2pt,
+      showstringspaces=false,
+      columns=fullflexible,keepspaces
+  }
 
-\\lstset{
-    language=Scala,
-    tabsize=2,
-    basicstyle=\\ttfamily,
-    keywordstyle=\\bfseries\\color{eclipsepurple},
-    commentstyle=\\color{mygreen},
-    numberstyle={\\footnotesize},
-    numbers=none,
-    %backgroundcolor=\\color{gray!15},
-    frame=none, %single,
-    rulecolor=\\color{black!25},
-    %title={\\footnotesize\\lstname},
-    breaklines=false,
-    breakatwhitespace=false,
-    framextopmargin=2pt,
-    framexbottommargin=2pt,
-    showstringspaces=false,
-    columns=fullflexible,keepspaces
-}
+  \\lstset{literate=%
+  {Å}{{\\AA}}1
+  {Ä}{{\\"A}}1
+  {Ö}{{\\"O}}1
+  {Ü}{{\\"U}}1
+  {ß}{{\\ss}}1
+  {ü}{{\\"u}}1
+  {å}{{\\aa}}1
+  {ä}{{\\"a}}1
+  {ö}{{\\"o}}1
+  {æ}{{\\ae}}1
+  {ø}{{\\o}}1
+  {Æ}{{\\AE}}1
+  {Ø}{{\\O}}1
+  {`}{{\\`{}}}1
+  {─}{{\\textemdash}}1
+  {└}{{|}}1
+  {├}{{|}}1
+  {│}{{|}}1
+  {♠}{{$$\\spadesuit$$}}1
+  {♥}{{$$\\heartsuit$$}}1
+  {♣}{{$$\\clubsuit$$}}1
+  {♦}{{$$\\diamondsuit$$}}1
+  }
 
-\\lstset{literate=%
-{Å}{{\\AA}}1
-{Ä}{{\\"A}}1
-{Ö}{{\\"O}}1
-{Ü}{{\\"U}}1
-{ß}{{\\ss}}1
-{ü}{{\\"u}}1
-{å}{{\\aa}}1
-{ä}{{\\"a}}1
-{ö}{{\\"o}}1
-{æ}{{\\ae}}1
-{ø}{{\\o}}1
-{Æ}{{\\AE}}1
-{Ø}{{\\O}}1
-{`}{{\\`{}}}1
-{─}{{\\textemdash}}1
-{└}{{|}}1
-{├}{{|}}1
-{│}{{|}}1
-{♠}{{$$\\spadesuit$$}}1
-{♥}{{$$\\heartsuit$$}}1
-{♣}{{$$\\clubsuit$$}}1
-{♦}{{$$\\diamondsuit$$}}1
-}
-
-\\lstnewenvironment{Scala}[1][]{%
-    \\lstset{#1}%
-}{}  
-  """ 
+  \\lstnewenvironment{Scala}[1][]{%
+      \\lstset{#1}%
+  }{}  
+    """ 
+end Latex

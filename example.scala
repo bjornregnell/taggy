@@ -5,25 +5,26 @@
 
 import taggy.*
 
-@main def examplePdf = 
-  println("Generating slides in target/out.tex, converting to target/out.pdf")
+@main def makePdf = 
+  println("\nGenerating slides in target/out.tex, latexmk -> target/out.pdf\n")
   exampleSlides.toPdf()
 
-def exampleSlides = document("Scala 3 Goodies"){
+def exampleSlides = document("Scala 3 Goodies"):
   frame("Goals"):
     itemize:
       p("Showcase **cool new stuff** in Scala 3")
       p("Help you get started with Scala using `scala-cli`")
       p("Illustrated by Scala 3 DSL (for *these* slides...)")
       p("https://github.com/bjornregnell/new-in-Scala3")
-
-    image(file = "../scala-logo") 
+    image(file = "../scala-logo", width = 0.33) 
 
   frame("A slide DSL embedded in Scala 3"):
+    textSize(7.5,10.5)
     codeFromUntil(file = "example.scala"):
       "frame" -> """frame("Background"""
     space(2.0)
-    p("**Run \\\\& open**: `scala-cli run . && xdg-open target/out.pdf`")
+    p("**Compile to pdf**: `  scala-cli run .`")
+    p("**Open output here**: `target/out.pdf`")
 
   frame("Background: What is Scala?"):
     itemize:
@@ -67,7 +68,7 @@ def exampleSlides = document("Scala 3 Goodies"){
       p("Make migration as smooth as possible")
     p("https://docs.scala-lang.org/scala3/reference/overview.html")
 
-  frame("Scala 3 goodies for learners (and you?)"):
+  frame("Scala 3 goodies for learners and teachers"):
     p("An even better tool for teaching and learning:")
     itemize:
       p("Optional braces")
@@ -123,4 +124,3 @@ def exampleSlides = document("Scala 3 Goodies"){
       p("https://scala-native.readthedocs.io/en/latest/")
       p("https://docs.scala-lang.org/scala3/new-in-scala3.html")
       p("https://dotty.epfl.ch/docs/reference/experimental")
-}
