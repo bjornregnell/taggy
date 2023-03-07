@@ -1,5 +1,3 @@
-//> using scala "3.2.nightly"
-
 package taggy
 
 def loadLines(path: String): Seq[String] =
@@ -21,7 +19,7 @@ extension (s: String) def saveTo(path: String): Unit =
     try pw.write(s) finally pw.close()
 
 enum Tag:
-  case Document, Frame, Itemize, Enumerate, Paragraph, Code, Space
+  case Document, Frame, Itemize, Enumerate, Paragraph, Code, Space, Image
 
 export Tag.*
 
@@ -65,7 +63,8 @@ def p(text: String): TreeContext = leaf(Paragraph, text)
 def code(text: String): TreeContext = leaf(Code, text)
 def codeFromUntil(file: String)(fromUntil: (String, String)): TreeContext = 
   code(selectFrom(file)(fromUntil))
-def space(nbrOfLines: Double = 1.0): TreeContext = leaf(Space, nbrOfLines.toString)
+def space(lines: Double = 1.0): TreeContext = leaf(Space, lines.toString)
+def image(file: String): TreeContext = leaf(Image, file)
 
 object Latex:
   def fromTree(tree: Tree): String =
@@ -87,6 +86,9 @@ object Latex:
           env(listEnv)(body.mkString)
         case Code => env("Scala")(t.value.minimizeMargin)
         case Space => cmdArg("vspace")(s"${t.value}em")
+        case Image => 
+          cmd("vfill") ++ 
+            env("center")(cmdOptArg("includegraphics")("width=0.2\\textwidth")(t.value))
     loop(tree)
 
   def brackets(params: String*): String = 
@@ -193,7 +195,7 @@ object Preamble:
 \\lstset{
     language=Scala,
     tabsize=2,
-    basicstyle=\\ttfamily\\fontsize{7.5}{10}\\selectfont,
+    basicstyle=\\ttfamily,
     keywordstyle=\\bfseries\\color{eclipsepurple},
     commentstyle=\\color{mygreen},
     numberstyle={\\footnotesize},

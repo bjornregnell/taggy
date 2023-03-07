@@ -1,21 +1,23 @@
-//> using lib "taggy:taggy:0.0.3,url=https://github.com/bjornregnell/taggy/releases/download/v0.0.3/taggy_3-0.0.3.jar"
-//> using scala "3.2.nightly"
+//> using scala "3.3.0-RC3"
+//> using lib "taggy:taggy:0.0.4,url=https://github.com/bjornregnell/taggy/releases/download/v0.0.4/taggy_3-0.0.4.jar"
+
 //  run in terminal: scala-cli run example.scala
 
-import scala.language.experimental.fewerBraces
 import taggy.*
 
 @main def examplePdf = 
-  println("Start generating slides from target/out.tex to target/out.pdf")
+  println("Generating slides in target/out.tex, converting to target/out.pdf")
   exampleSlides.toPdf()
 
-def exampleSlides = document("Scala 3 goodies"){
+def exampleSlides = document("Scala 3 Goodies"){
   frame("Goals"):
     itemize:
       p("Showcase **cool new stuff** in Scala 3")
       p("Help you get started with Scala using `scala-cli`")
       p("Illustrated by Scala 3 DSL (for *these* slides...)")
       p("https://github.com/bjornregnell/new-in-Scala3")
+
+    image(file = "../scala-logo") 
 
   frame("A slide DSL embedded in Scala 3"):
     codeFromUntil(file = "example.scala"):

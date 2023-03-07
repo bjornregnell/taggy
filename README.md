@@ -17,13 +17,12 @@
 * Copy-paste the text below and save it in a file called `my-slides.scala` in an empty new folder and do `scala-cli run .` in that folder.
 ```
 // Two magic comments used by scala-cli (just copy-paste them):
-//> using lib "taggy:taggy:0.0.3,url=https://github.com/bjornregnell/taggy/releases/download/v0.0.3/taggy_3-0.0.3.jar"
-//> using scala "3.2.nightly"
+//> using lib "taggy:taggy:0.0.4,url=https://github.com/bjornregnell/taggy/releases/download/v0.0.4/taggy_3-0.0.4.jar"
+//> using scala "3.3.0-RC3"
 
 //  run this command in terminal to create slides in target/out.pdf 
 //  scala-cli run .
 
-import scala.language.experimental.fewerBraces
 import taggy.*
 
 @main def run = slides.toPdf()
