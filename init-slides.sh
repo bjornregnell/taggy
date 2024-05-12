@@ -14,13 +14,12 @@ fi
 
 cat > "$DEST" << EOF
 // Two magic comments used by scala-cli (just copy-paste them):
-//> using lib "taggy:taggy:0.0.5,url=https://github.com/bjornregnell/taggy/releases/download/v0.0.5/taggy_3-0.0.5.jar"
-//> using scala "3.2.nightly"
+//> using dep "taggy:taggy:0.0.5,url=https://github.com/bjornregnell/taggy/releases/download/v0.0.5/taggy_3-0.0.5.jar"
+//> using scala "3.4.1"
 
 //  run this command in terminal to create slides in target/out.pdf 
 //  scala-cli run .
 
-import scala.language.experimental.fewerBraces
 import taggy.*
 
 @main def run = slides.toPdf()
