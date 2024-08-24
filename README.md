@@ -45,9 +45,11 @@ def slides = document("Taggy Slide Example", author = "Oddput Clementine"):
 curl -fL https://github.com/bjornregnell/taggy/releases/download/v1.0.0/init-slides.sh | bash
 ```
 
+* See more examples in [example.scala](https://github.com/bjornregnell/taggy/tree/main/example.scala).
+
+
 NOTE: If you run into errors like `Latex ERROR in target/out.log` and `Package babel Error: Unknown option 'swedish'.` when latexmk is compiling then you are missing a latex package and need to do `sudo apt install texlive-lang-european` (if you do `sudo apt install texlive-full` you will get everything needed but its a bigger install). More info [here](https://users.scala-lang.org/t/first-stable-release-of-taggy-for-easy-slides-showcasing-contextual-abstraction/10170/5)
 
-* See more examples [here](https://github.com/bjornregnell/taggy/tree/main/example.scala).
 
 # How to build `taggy`?
 
