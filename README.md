@@ -3,7 +3,7 @@
 
 * `taggy` is an easy-to-use library for **tagging structured text**, see [example below](https://github.com/bjornregnell/taggy#how-to-use-taggy).
 
-* With `taggy` you can make **good-looking slides** in pdf via latex. See example [here](https://github.com/bjornregnell/taggy/releases/download/v0.0.5/out.pdf). Future plans include generation of markdown and html.
+* With `taggy` you can make **good-looking slides** in pdf via latex. See example [here](https://github.com/bjornregnell/taggy/releases/download/v0.0.5/out.pdf). Future plans include generation of markdown and html. Contributions welcome.
 
 * `taggy` is a zero-dependency [Scala 3](https://docs.scala-lang.org/scala3/new-in-scala3.html) micro-library that shows how you can construct a concise and type-safe embedded DSL using a modern Scala abstraction mechanism called [**Contextual Abstraction**](https://docs.scala-lang.org/scala3/reference/contextual/index.html) 
 
@@ -13,8 +13,9 @@
 
 # How to use `taggy`?
 
-* See example usage of `taggy` below, with [`scala-cli`](https://scala-cli.virtuslab.org/) that automatically downloads `taggy` as a Github dependency. 
-* Copy-paste the text below and save it in a file called `my-slides.scala` in an empty new folder and do `scala-cli run .` in that folder.
+* See example usage of `taggy` below using the new [`scala` runner](https://www.scala-lang.org/blog/2024/08/22/scala-3.5.0-released.html) that can automatically download `taggy` as a Github dependency. 
+
+* Copy-paste the text below and save it in a file called `my-slides.scala` or similar in an empty new folder and do `scala-cli run .` in that folder.
 ```scala
 //> using scala 3.5.0
 //> using dep "taggy:taggy:1.0.0,url=https://github.com/bjornregnell/taggy/releases/download/v1.0.0/taggy_3-1.0.0.jar"
@@ -42,7 +43,7 @@ def slides = document("Taggy Slide Example", author = "Oddput Clementine"):
 * Instead of doing the copy-paste-save above you can just run this command and you should get see slides in a pdf viewer when ready:
 ```bash
 curl -fL https://github.com/bjornregnell/taggy/releases/download/v1.0.0/init-slides.sh | bash
-
+```
 * See more examples [here](https://github.com/bjornregnell/taggy/tree/main/example.scala).
 
 # How to build `taggy`?
