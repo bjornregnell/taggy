@@ -68,11 +68,11 @@ Publishing requires maintainer access. If you use `gh` see manual: https://cli.g
       scala clean .
       rm -rf target
       scala run .
+      xdg-open target/out.pdf
 * Commit and push all changes
       
       git commit -am "prepare release"
       git push
-      scala run .
 * Draft a new release on https://github.com/bjornregnell/taggy/releases 
       
       gh release create v1.0.1 --generate-notes
