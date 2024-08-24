@@ -57,14 +57,14 @@ scala package taggy.scala -o taggy_3-1.0.0.jar --library
 
 Publishing requires maintainer access. If you use `gh` see manual: https://cli.github.com/manual/
 
-* Bump all versions to `x.y.z` in README.md and example.scala by replacing all `x.y.{z - 1}` by `x.y.z`
+* Bump all versions in README.md, example.scala, init-slides.sh
 * Commit and push all changes
       
       git commit -am "prepare release"
       git push
-* Draft a new release on https://github.com/bjornregnell/taggy/releases but make sure to bump versions
+* Draft a new release on https://github.com/bjornregnell/taggy/releases 
       
       gh release create v1.0.0 --generate-notes
-* Build (see above) and upload jar named `taggy_3-x.y.z.jar` and `init-slides.sh`
+* Build (see above) and upload jar named `taggy_3-1.0.0.jar` and `init-slides.sh`
       
       gh release upload v1.0.0 taggy_3-1.0.0.jar init-slides.sh
