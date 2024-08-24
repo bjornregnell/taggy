@@ -1,15 +1,15 @@
 # What is `taggy`?
 
 
-* `taggy` is an easy-to-use api for **tagging structured text**, see [example below](https://github.com/bjornregnell/taggy#how-to-use-taggy).
+* `taggy` is an easy-to-use library for **tagging structured text**, see [example below](https://github.com/bjornregnell/taggy#how-to-use-taggy).
 
 * With `taggy` you can make **good-looking slides** in pdf via latex. See example [here](https://github.com/bjornregnell/taggy/releases/download/v0.0.5/out.pdf). Future plans include generation of markdown and html.
 
-* `taggy` is a zero-dependency [Scala 3](https://docs.scala-lang.org/scala3/new-in-scala3.html) micro-library that shows how you can construct a concise and type-safe Scala-embedded DSL using [contextual abstraction](https://docs.scala-lang.org/scala3/reference/contextual/index.html). 
+* `taggy` is a zero-dependency [Scala 3](https://docs.scala-lang.org/scala3/new-in-scala3.html) micro-library that shows how you can construct a concise and type-safe embedded DSL using a modern Scala abstraction mechanism called [**Contextual Abstraction**](https://docs.scala-lang.org/scala3/reference/contextual/index.html) 
 
-* WARNING: `taggy` is a proof-of-concept and still under development. It benefits from an experimental feature of the Scala compiler >= 3.3 called [`fewerBraces`](https://docs.scala-lang.org/sips/fewer-braces.html).
+* `taggy` is pleasant to use thanks to the simple syntax of [**Optional Braces**](https://docs.scala-lang.org/scala3/reference/other-new-features/indentation.html).
 
-* You need to have `latexmk` from [TexLive](https://tug.org/texlive/) on your path. Install it on Ubuntu using `sudo apt install texlive-full`
+* You need to have `latexmk` from [TexLive](https://tug.org/texlive/) on your path to build slides in pdf. Install it on Ubuntu using `sudo apt install texlive-full`
 
 # How to use `taggy`?
 
