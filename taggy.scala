@@ -127,7 +127,7 @@ object Latex:
   def braces(params: String*): String = 
     if params.isEmpty then "" else params.mkString("{","}{","}")
 
-  def cmd(command: String): String = s"\\$command"
+  def cmd(command: String): String = s"\\$command{}"
 
   def cmdArg(command: String)(args: String*): String = 
       s"\\$command${braces(args*)}"
