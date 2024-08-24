@@ -40,7 +40,7 @@ def slides = document("Taggy Slide Example", author = "Oddput Clementine"):
     p("By micro-lib https://github.com/bjornregnell/taggy and awesome Scala")
 ```
 
-* Instead of doing the copy-paste-save above you can just run this command and you should get see slides in a pdf viewer when ready:
+* Instead of doing the copy-paste-save above you can just run this command in Ubuntu and you should get to see slides in your pdf viewer when ready:
 ```bash
 curl -fL https://github.com/bjornregnell/taggy/releases/download/v1.0.0/init-slides.sh | bash
 ```
