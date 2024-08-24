@@ -71,8 +71,10 @@ Publishing requires maintainer access. If you use `gh` see manual: https://cli.g
       xdg-open target/out.pdf
 * Commit and push all changes
       
-      git commit -am "prepare release"
-      git push
+      git commit -am "prepare release" && git push
+* Build the jar:
+      
+      scala package taggy.scala -o taggy_3-1.0.1.jar --library
 * Draft a new release on https://github.com/bjornregnell/taggy/releases 
       
       gh release create v1.0.1 --generate-notes
