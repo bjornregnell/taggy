@@ -22,7 +22,6 @@ cat > "$DEST" << EOF
 // run this command with at least Scala 3.5 in terminal to create slides in target/out.pdf 
 // scala run .
 
-import scala.language.experimental.fewerBraces
 import taggy.*
 
 @main def run = slides.toPdf()
