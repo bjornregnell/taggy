@@ -18,7 +18,7 @@
 * Copy-paste the text below and save it in a file called `my-slides.scala` or similar in an empty new folder and do `scala-cli run .` in that folder.
 ```scala
 //> using scala 3.5.0
-//> using dep "taggy:taggy:1.0.0,url=https://github.com/bjornregnell/taggy/releases/download/v1.0.0/taggy_3-1.0.0.jar"
+//> using dep "taggy:taggy:1.0.1,url=https://github.com/bjornregnell/taggy/releases/download/v1.0.1/taggy_3-1.0.1.jar"
 
 // Above 2 "magic" comments: just copy-paste them, bump Scala version if Latest is newer.
 // Latest Scala release here: https://www.scala-lang.org/
@@ -42,7 +42,7 @@ def slides = document("Taggy Slide Example", author = "Oddput Clementine"):
 
 * Instead of doing the copy-paste-save above you can just run this command in Ubuntu and you should get to see slides in your pdf viewer when ready:
 ```bash
-curl -fL https://github.com/bjornregnell/taggy/releases/download/v1.0.0/init-slides.sh | bash
+curl -fL https://github.com/bjornregnell/taggy/releases/download/v1.0.1/init-slides.sh | bash
 ```
 
 * See more examples in [example.scala](https://github.com/bjornregnell/taggy/tree/main/example.scala).
@@ -55,7 +55,7 @@ NOTE: If you run into errors like `Latex ERROR in target/out.log` and `Package b
 
 Using Scala >= 3.5.0 create a library jar with this command:
 ```bash
-scala package taggy.scala -o taggy_3-1.0.0.jar --library
+scala package taggy.scala -o taggy_3-1.0.1.jar --library
 ```
 
 # How to publish `taggy`? 

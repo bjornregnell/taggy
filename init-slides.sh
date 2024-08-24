@@ -14,7 +14,7 @@ fi
 
 cat > "$DEST" << EOF
 //> using scala 3.5.0
-//> using dep "taggy:taggy:1.0.0,url=https://github.com/bjornregnell/taggy/releases/download/v1.0.0/taggy_3-1.0.0.jar"
+//> using dep "taggy:taggy:1.0.1,url=https://github.com/bjornregnell/taggy/releases/download/v1.0.1/taggy_3-1.0.1.jar"
 
 // Above 2 "magic" comments: just copy-paste them, bump Scala version if Latest is newer.
 // Latest Scala release here: https://www.scala-lang.org/
