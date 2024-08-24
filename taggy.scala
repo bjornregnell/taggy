@@ -5,7 +5,8 @@ export Key.*
 export TreeBuilders.*
 
 def loadLines(path: String): Seq[String] =
-  io.Source.fromFile(path, "UTF-8").getLines.toSeq 
+  val s = io.Source.fromFile(path, "UTF-8")
+  try s.getLines.toSeq finally s.close() 
 
 def selectFrom(path: String)(fromUntil: (String, String)): String = 
   val (from, until) = (fromUntil(0).trim, fromUntil(1).trim)
