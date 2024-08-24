@@ -26,10 +26,11 @@ enum Tag:
   case Document, Frame, Itemize, Enumerate, Paragraph, Code, Space, Image, TextSize
 
 enum Key: 
-  case Width, FontSize, LineSpace
+  case Width, FontSize, LineSpace, Author
 
 type Setting = (Key, String)
-val defaultSettings: Map[Key, String] = Map(Width -> "0.5", FontSize -> "10", LineSpace -> "12")
+val defaultSettings: Map[Key, String] = 
+  Map(Width -> "0.5", FontSize -> "10", LineSpace -> "12", Author -> "")
 
 class Tree(var tag: Tag, var value: String, settings: Setting*): 
   lazy val config: Map[Key, String] = settings.toMap
@@ -67,7 +68,7 @@ def branch(tag: Tag, value: String = "", settings: Setting*)(body: TreeContext):
   summon[Tree].sub += subTree
 
 object TreeBuilders:
-  def document(title: String)(body: TreeContext): Tree = root(Document, title)(body)
+  def document(title: String, author: String = "")(body: TreeContext): Tree = root(Document, title, Author -> author)(body)
   def itemize(body: TreeContext): TreeContext = branch(Itemize)(body)
   def enumerate(body: TreeContext): TreeContext = branch(Enumerate)(body)
   def frame(title: String)(body: TreeContext): TreeContext = branch(Frame, title)(body)
@@ -89,9 +90,14 @@ end TreeBuilders
 object Latex:
   def fromTree(tree: Tree): String =
     def loop(t: Tree): String =
-      inline def tail: String = t.sub.map(loop).mkString
+      inline def tail: String = t.sub.map(loop).mkString //recursive call to loop
+      inline def ifNE(a: String, f: String => String): String = if a.nonEmpty then f(a) else ""
       t.tag match
-        case Document  => env("document")(s"\\title{${t.value}}\\maketitle\n$tail")
+        case Document  => 
+          env("document"):
+            s"""|\\title{${t.value}}
+                |${ifNE(t.setting(Author), a => s"\n\\author{$a}")}
+                |\\maketitle\n$tail""".stripMargin
         case Frame     => envArg("frame")("fragile")(t.value.replaceAllMarkers)(tail)
         case Paragraph => s"${t.value.replaceAllMarkers}$tail\n" ++ cmd("\\")
         case Itemize | Enumerate => 

@@ -1,7 +1,7 @@
-//> using scala "3.3.0-RC3"
-//> using lib "taggy:taggy:0.0.5,url=https://github.com/bjornregnell/taggy/releases/download/v0.0.5/taggy_3-0.0.5.jar"
+//> using scala 3.5.0
+//> using dep "taggy:taggy:1.0.0,url=https://github.com/bjornregnell/taggy/releases/download/v1.0.0/taggy_3-1.0.0.jar"
 
-//  run in terminal: scala-cli run example.scala
+//  run in terminal: scala run example.scala
 
 import taggy.*
 
@@ -9,7 +9,7 @@ import taggy.*
   println("\nGenerating slides in target/out.tex, latexmk -> target/out.pdf\n")
   exampleSlides.toPdf()
 
-def exampleSlides = document("Scala 3 Goodies"):
+def exampleSlides = document("Scala 3 Goodies", author = "Björn Regnell"):
   frame("Goals"):
     itemize:
       p("Showcase **cool new stuff** in Scala 3")

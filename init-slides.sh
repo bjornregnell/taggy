@@ -3,7 +3,7 @@
 DEST=slides.scala
 
 if [ -f "$DEST" ]; then
-  echo "file $DEST already exists"
+  echo "File $DEST already exists. Exit and delete it if you want to re-generate."
   read -p "Enter another file name (or just enter to exit): " DEST
   if test -z "$DEST"; then
     echo "No file given. Exiting without creating anything."
@@ -13,25 +13,27 @@ if [ -f "$DEST" ]; then
 fi
 
 cat > "$DEST" << EOF
-// Two magic comments used by scala-cli (just copy-paste them):
-//> using lib "taggy:taggy:0.0.3,url=https://github.com/bjornregnell/taggy/releases/download/v0.0.3/taggy_3-0.0.3.jar"
-//> using scala "3.2.nightly"
+//> using scala 3.5.0
+//> using dep "taggy:taggy:1.0.0,url=https://github.com/bjornregnell/taggy/releases/download/v1.0.0/taggy_3-1.0.0.jar"
 
-//  run this command in terminal to create slides in target/out.pdf 
-//  scala-cli run .
+// Above 2 "magic" comments: just copy-paste them, bump Scala version if Latest is newer.
+// Latest Scala release here: https://www.scala-lang.org/
+
+// run this command with at least Scala 3.5 in terminal to create slides in target/out.pdf 
+// scala run .
 
 import scala.language.experimental.fewerBraces
 import taggy.*
 
 @main def run = slides.toPdf()
 
-def slides = document("Taggy Slide Example"):
+def slides = document("Taggy Slide Example", author = "Oddput Clementine"):
   frame("Greetings in two languages"):
     p("Nice greetings:")
     itemize:
       p("English: Hello world!")
       p("Swedish: Hej världen!")
-    p("https://github.com/bjornregnell/taggy")
+    p("By micro-lib https://github.com/bjornregnell/taggy and awesome Scala")
 EOF
 
 echo "Compiling and running $DEST using scala-cli"
