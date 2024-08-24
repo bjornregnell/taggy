@@ -35,8 +35,8 @@ def slides = document("Taggy Slide Example", author = "Oddput Clementine"):
     p("By micro-lib https://github.com/bjornregnell/taggy and awesome Scala")
 EOF
 
-echo "Compiling and running $DEST using scala-cli"
-scala-cli run "$DEST"
+echo "Compiling and running $DEST using scala"
+scala run "$DEST"
 
 echo "Opening pdf-file in target"
 xdg-open target/out.pdf
