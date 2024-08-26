@@ -179,14 +179,17 @@ object Latex:
 
   case class Preamble(value: String)
   object Preamble:
-    given defaultPreamble: Preamble = Preamble(slideTemplate())
+    given defaultPreamble: Preamble = Preamble(beamerTemplate(handout = false, babelLang = "english"))
 
-    def slideTemplate(): String = s"""
-  \\documentclass{beamer}
+    def beamerTemplate(handout: Boolean, babelLang: String): String = 
+      val beamerClassArgs = if handout then "[handout]" else "" 
+      val bableArgs = if babelLang.nonEmpty then s"[$babelLang]" else ""
+      s"""
+  \\documentclass$beamerClassArgs{beamer}
   \\beamertemplatenavigationsymbolsempty
   \\setbeamertemplate{footline}[frame number] 
   \\setbeamercolor{page number in head/foot}{fg=gray} 
-  \\usepackage[swedish]{babel}
+  \\usepackage$bableArgs{babel}
   \\usepackage[utf8]{inputenc}
   \\usepackage[T1]{fontenc}
   \\usepackage{tgheros, beramono}

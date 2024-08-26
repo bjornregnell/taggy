@@ -9,7 +9,7 @@ import taggy.*
   println("\nGenerating slides in target/out.tex, latexmk -> target/out.pdf\n")
   exampleSlides.toPdf()
 
-def exampleSlides = document("Scala 3 Goodies", author = "Björn Regnell"):
+def exampleSlides = document("Scala 3 Goodies", author = "Bjorn Regnell"):
   frame("Goals"):
     itemize:
       p("Showcase **cool new stuff** in Scala 3")
