@@ -5,7 +5,7 @@
 // Latest Scala release here: https://www.scala-lang.org/
 
 // run this command with at least Scala 3.5 in terminal to create slides in target/out.pdf
-// scala run .
+// scala run init-taggy.sc
 
 import taggy.*
 
